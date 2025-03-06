@@ -1,0 +1,17 @@
+.productos{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.producto{
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    width: 200px;
+}
+
+.producto img{
+    width: 100%;
+    height: auto;
+}
