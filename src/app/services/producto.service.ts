@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Producto } from '../models/producto';
+import{HttpClient} from '@angular/common/http';
+import{Observable} from 'rxjs';
+import{map} from 'rxjs/operators';
 
 @Injectable
 (
@@ -10,6 +13,9 @@ import { Producto } from '../models/producto';
 
 export class ProductoService 
 {
+  private xmlUrl = 'assets/productos.xml';
+
+
   /* 
   ID: [tipo_consola][Compañia][Generacion][variante][Edicion Especial]
 
@@ -50,17 +56,37 @@ export class ProductoService
   */
   private productos : Producto[] = 
   [
-    new Producto(21410,"Nintendo 3DS",2500,"assets/Portatil/Nintendo/3DS/3DS/Normales/3DS.jpg"),
-    new Producto(21420,"Nintendo 3DS XL",2800,"assets/3DS XL.jpg"),
-    new Producto(21430,"Nintendo 2DS",2000,"assets/2DS.jpg"),
-    new Producto(21440,"Nintendo New 2DS XL",3000,"assets/New 2DS XL.jpg"),
-    new Producto(21450,"Nintendo New 3DS",3000,"assets/New 3DS.jpg"),
-    new Producto(21460,"Nintendo New 3DS XL",3500,"assets/New 3DS XL.jpg")
+    new Producto(21410,"Nintendo 3DS",2500,1,"assets/Portatil/Nintendo/3DS/3DS/Normales/3DS.jpg"),
+    new Producto(21420,"Nintendo 3DS XL",2800,1,"assets/3DS XL.jpg"),
+    new Producto(21430,"Nintendo 2DS",2000,1,"assets/2DS.jpg"),
+    new Producto(21440,"Nintendo New 2DS XL",3000,1,"assets/New 2DS XL.jpg"),
+    new Producto(21450,"Nintendo New 3DS",3000,1,"assets/New 3DS.jpg"),
+    new Producto(21460,"Nintendo New 3DS XL",3500,1,"assets/New 3DS XL.jpg")
   ];
   obtener_Producto() : Producto[]
   {
     return this.productos;
   }
 
-  constructor() { }
+  obtener_Productos(): Observable<any[]>
+  {
+    return this.http.get(this.xmlUrl,{responseType: 'text'}).pipe(
+      map (xml => 
+        {
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(xml, 'text/xml');
+          const productos = Array.from(xmlDoc.querySelectorAll('producto')).map(producto => ({
+              id: producto.getElementsByTagName('id')[0].textContent,
+              nombre: producto.getElementsByTagName('nombre')[0].textContent,
+            })
+          );
+          return productos;
+        })
+    );
+  }
+
+  constructor
+  (
+    private http: HttpClient
+  ) { }
 }
