@@ -1,0 +1,145 @@
+.container {
+  padding: 20px;
+}
+
+.acciones-globales {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.btn-descargar {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.formulario-producto {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.form-grupo {
+  margin-bottom: 15px;
+}
+
+.form-grupo label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-grupo input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.botones-accion {
+  margin-top: 20px;
+}
+
+.botones-accion button {
+  padding: 10px 15px;
+  margin-right: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.botones-accion button[type="button"] {
+  background-color: #f44336;
+}
+
+.resumen-inventario {
+  margin-bottom: 30px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+}
+
+.estadisticas {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.estadistica {
+  padding: 10px;
+  text-align: center;
+}
+
+.etiqueta {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.valor {
+  font-size: 1.2em;
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.sin-stock {
+  background-color: #ffebee;
+}
+
+.btn-editar {
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  margin-right: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-eliminar {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.estado {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.9em;
+}
+
+.disponible {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.agotado {
+  background-color: #ffebee;
+  color: #c62828;
+}

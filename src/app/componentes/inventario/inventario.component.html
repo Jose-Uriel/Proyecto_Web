@@ -1,0 +1,103 @@
+<div class="container">
+  <h2>Administración de Inventario</h2>
+  
+  <!-- Botones de acción global -->
+  <div class="acciones-globales">
+    <button (click)="descargar_XML()" class="btn-descargar">Descargar Inventario (XML)</button>
+  </div>
+  
+  <!-- Formulario para agregar/editar productos -->
+  <div class="formulario-producto">
+    <h3>{{ modoEdicion ? 'Editar Producto' : 'Agregar Nuevo Producto' }}</h3>
+    <form (ngSubmit)="guardarProducto()">
+      <div class="form-grupo">
+        <label for="id">ID:</label>
+        <input type="number" id="id" [(ngModel)]="productoActual.id" name="id" [disabled]="modoEdicion" required>
+      </div>
+      
+      <div class="form-grupo">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" [(ngModel)]="productoActual.nombre" name="nombre" required>
+      </div>
+      
+      <div class="form-grupo">
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio" [(ngModel)]="productoActual.precio" name="precio" required>
+      </div>
+      
+      <div class="form-grupo">
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" [(ngModel)]="productoActual.cantidad" name="cantidad" required>
+      </div>
+      
+      <div class="form-grupo">
+        <label for="imagen">URL de Imagen:</label>
+        <input type="text" id="imagen" [(ngModel)]="productoActual.imagen" name="imagen" required>
+      </div>
+      
+      <div class="botones-accion">
+        <button type="submit">{{ modoEdicion ? 'Actualizar' : 'Agregar' }}</button>
+        <button type="button" (click)="cancelarEdicion()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Resumen estadístico del inventario -->
+  <div class="resumen-inventario">
+    <h3>Resumen del Inventario</h3>
+    <div class="estadisticas">
+      <div class="estadistica">
+        <span class="etiqueta">Total Productos:</span>
+        <span class="valor">{{ inventario.length }}</span>
+      </div>
+      <div class="estadistica">
+        <span class="etiqueta">Productos Disponibles:</span>
+        <span class="valor">{{ productosDisponibles }}</span>
+      </div>
+      <div class="estadistica">
+        <span class="etiqueta">Productos Agotados:</span>
+        <span class="valor">{{ inventario.length - productosDisponibles }}</span>
+      </div>
+      <div class="estadistica">
+        <span class="etiqueta">Valor Total:</span>
+        <span class="valor">${{ valorTotalInventario | number:'1.2-2' }}</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Listado de productos en inventario -->
+  <div class="lista-productos">
+    <h3>Productos en Inventario</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Imagen</th>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of inventario" [class.sin-stock]="producto.cantidad === 0">
+          <td>{{ producto.id }}</td>
+          <td><img [src]="producto.imagen" alt="{{ producto.nombre }}" width="50"></td>
+          <td>{{ producto.nombre }}</td>
+          <td>${{ producto.precio | number:'1.2-2' }}</td>
+          <td>{{ producto.cantidad }}</td>
+          <td>
+            <span class="estado" [class.disponible]="producto.cantidad > 0" [class.agotado]="producto.cantidad === 0">
+              {{ producto.cantidad > 0 ? 'Disponible' : 'Agotado' }}
+            </span>
+          </td>
+          <td>
+            <button (click)="editarProducto(producto)" class="btn-editar">Editar</button>
+            <button (click)="eliminarProducto(producto.id)" class="btn-eliminar">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

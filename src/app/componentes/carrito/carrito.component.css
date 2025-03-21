@@ -1,0 +1,231 @@
+.carrito-container {
+  display: flex;
+  gap: 30px;
+  margin: 20px 0;
+}
+
+.productos-lista {
+  flex: 2;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.resumen-compra {
+  flex: 1;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+.producto-info {
+  flex: 3;
+  display: flex;
+  align-items: center;
+}
+
+.producto-info img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 15px;
+}
+
+.producto-detalles {
+  flex-grow: 1;
+}
+
+.producto-nombre {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.producto-precio {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.cantidad-controles {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cantidad-controles button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cantidad-controles span {
+  min-width: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.acciones {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-eliminar {
+  padding: 5px 10px;
+  background-color: #ff5252;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.resumen-titulo {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ddd;
+}
+
+.resumen-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.resumen-total {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 2px solid #ddd;
+}
+
+.acciones-compra {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.btn-recibo, .btn-descargar {
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+}
+
+.btn-recibo {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-descargar {
+  background-color: #3498db;
+  color: white;
+}
+
+.carrito-vacio {
+  text-align: center;
+  padding: 30px;
+  color: #666;
+  font-size: 1.2rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+/* Añadir estos estilos al final del archivo, antes de la sección responsiva */
+
+.resumen-productos {
+  margin-bottom: 15px;
+}
+
+.lista-compacta {
+  max-height: 150px;
+  overflow-y: auto;
+  margin-bottom: 0;
+  padding-right: 5px;
+}
+
+.lista-compacta::-webkit-scrollbar {
+  width: 5px;
+}
+
+.lista-compacta::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+  border-radius: 5px;
+}
+
+.lista-compacta li {
+  padding: 8px 0;
+}
+
+.producto-resumen {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.nombre-compacto {
+  flex: 2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.precio-compacto {
+  flex: 1;
+  text-align: right;
+  font-weight: 500;
+}
+
+.separador {
+  height: 1px;
+  background-color: #ddd;
+  margin: 10px 0 15px;
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+  .carrito-container {
+    flex-direction: column;
+  }
+  
+  .resumen-compra {
+    position: static;
+    margin-top: 20px;
+  }
+}

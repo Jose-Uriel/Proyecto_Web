@@ -1,56 +1,77 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { CarritoService } from '../../services/carrito.service';
+import { Subscription } from 'rxjs';
 
-@Component
-({
+@Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './carrito.component.html',
   styleUrl: './carrito.component.css'
 })
-
-export class CarritoComponent 
+export class CarritoComponent implements OnInit, OnDestroy 
 {
-  carrito:any[] = [];
+  carrito: any[] = [];
   subtotal: number = 0;
   iva: number = 0;
   total: number = 0;
+  private subscription?: Subscription;
 
-  constructor
-  (
-    private carritoService:CarritoService
+  constructor(
+    private carritoService: CarritoService
   ) { }
 
-  ngOnInit()
+  ngOnInit(): void
   {
-    this.carrito = this.carritoService.obtener_Carrito();
-    this.calcular_Totales();
+    console.log('CarritoComponent inicializado');
+    // Suscribirse a los cambios en el carrito
+    this.subscription = this.carritoService.productos$.subscribe(productos => {
+      console.log('Nuevos productos recibidos:', productos);
+      this.carrito = productos;
+      this.calcular_Totales();
+    });
   }
 
-  eliminar_Producto(index:number)
+  ngOnDestroy(): void 
   {
-    this.carritoService.eliminar_Producto(index);
-    this.carrito = this.carritoService.obtener_Carrito();
-    this.calcular_Totales();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
-  generar_XML()
+  eliminar_Producto(index: number): void 
   {
-    this.carritoService.generar_XML();
+    this.carritoService.eliminarProducto(index);
   }
 
-  descargar_XML()
-  {
-    this.carritoService.descargar_XML();
+  incrementarCantidad(index: number): void {
+    this.carritoService.incrementarCantidad(index);
   }
 
-  calcular_Totales() {
-    this.subtotal = this.carrito.reduce((acc, producto) => acc + (producto.precio * producto.cantidad), 0);
-    this.iva = this.subtotal * 0.16; // Assuming IVA is 16%
+  decrementarCantidad(index: number): void {
+    this.carritoService.decrementarCantidad(index);
+  }
+
+  calcular_Totales(): void
+  {
+    this.subtotal = this.carrito.reduce((acc, producto) => 
+      acc + ((producto.precio || 0) * (producto.cantidad || 1)), 0);
+    this.iva = this.subtotal * 0.16;
     this.total = this.subtotal + this.iva;
   }
 
-  
+  // Corregir estos métodos para que llamen al servicio en lugar de a sí mismos
+  generar_XML(): void {
+    const xml = this.carritoService.generar_XML();
+    console.log('XML generado:', xml);
+    alert('XML generado correctamente');
+  }
+
+  descargar_XML(): void 
+  {
+    this.carritoService.descargar_XML();
+    console.log('Descargando XML...');
+  }
 }

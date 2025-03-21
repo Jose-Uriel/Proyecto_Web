@@ -1,15 +1,72 @@
 <h2>Carrito de Compras</h2>
-<div *ngIf="carrito.length > 0">
-  <ul>
-    <li *ngFor="let producto of carrito; let i = index">
-      {{producto.nombre}} - ${{producto.precio}} x {{producto.cantidad}}
-      <button (click)="eliminar_Producto(i)">Eliminar</button>
-    </li>
-  </ul>
-  <p>Subtotal: ${{subtotal}}</p>
-  <p>IVA (16%): ${{iva}}</p>
-  <p>Total: ${{total}}</p>
-  <button (click)="generar_XML()">Recibo</button>
-  <button (click)="descargar_XML()">Descargar XML</button>
+
+<div *ngIf="carrito.length > 0" class="carrito-container">
+  <!-- Lista de productos (izquierda) -->
+  <div class="productos-lista">
+    <h3>Productos Seleccionados</h3>
+    <ul>
+      <li *ngFor="let producto of carrito; let i = index">
+        <div class="producto-info">
+          <img *ngIf="producto.imagen" [src]="producto.imagen" alt="{{producto.nombre}}">
+          <div class="producto-detalles">
+            <div class="producto-nombre">{{producto.nombre}}</div>
+            <div class="producto-precio">${{producto.precio}}</div>
+          </div>
+        </div>
+        
+        <div class="cantidad-controles">
+          <button (click)="decrementarCantidad(i)">-</button>
+          <span>{{producto.cantidad}}</span>
+          <button (click)="incrementarCantidad(i)">+</button>
+        </div>
+        
+        <div class="acciones">
+          <button class="btn-eliminar" (click)="eliminar_Producto(i)">Eliminar</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Resumen de compra (derecha) -->
+  <div class="resumen-compra">
+    <div class="resumen-titulo">Resumen de compra</div>
+    
+    <!-- Lista compacta de productos -->
+    <div class="resumen-productos">
+      <ul class="lista-compacta">
+        <li *ngFor="let producto of carrito">
+          <div class="producto-resumen">
+            <span class="nombre-compacto">{{producto.nombre}} x{{producto.cantidad}}</span>
+            <span class="precio-compacto">${{(producto.precio * producto.cantidad).toFixed(2)}}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="separador"></div>
+    
+    <div class="resumen-item">
+      <span>Subtotal:</span>
+      <span>${{subtotal.toFixed(2)}}</span>
+    </div>
+    
+    <div class="resumen-item">
+      <span>IVA (16%):</span>
+      <span>${{iva.toFixed(2)}}</span>
+    </div>
+    
+    <div class="resumen-total">
+      <span>Total:</span>
+      <span>${{total.toFixed(2)}}</span>
+    </div>
+    
+    <div class="acciones-compra">
+      <button class="btn-recibo" (click)="generar_XML()">Ver recibo</button>
+      <button class="btn-descargar" (click)="descargar_XML()">Descargar XML</button>
+    </div>
+  </div>
 </div>
-<p *ngIf="carrito.length == 0">El carrito esta vacio</p>
+
+<div *ngIf="carrito.length == 0" class="carrito-vacio">
+  <p>El carrito está vacío</p>
+</div>
