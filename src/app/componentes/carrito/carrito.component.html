@@ -60,6 +60,15 @@
       <span>${{total.toFixed(2)}}</span>
     </div>
     
+    <!-- Estado del pago -->
+    <div *ngIf="isPaying" class="payment-status">
+      <p>{{paymentStatus}}</p>
+      <div class="spinner"></div>
+    </div>
+    
+    <!-- Contenedor para el botón de PayPal -->
+    <div id="paypal-button-container"></div>
+    
     <div class="acciones-compra">
       <button class="btn-recibo" (click)="generar_XML()">Ver recibo</button>
       <button class="btn-descargar" (click)="descargar_XML()">Descargar XML</button>

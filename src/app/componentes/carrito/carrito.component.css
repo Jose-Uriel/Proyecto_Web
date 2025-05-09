@@ -218,6 +218,37 @@ li:last-child {
   margin: 10px 0 15px;
 }
 
+/* Añadir estos estilos al final del archivo */
+
+#paypal-button-container {
+  margin: 20px 0;
+  min-height: 35px;
+}
+
+.payment-status {
+  text-align: center;
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin: 10px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Diseño responsivo */
 @media (max-width: 768px) {
   .carrito-container {

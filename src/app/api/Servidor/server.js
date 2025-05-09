@@ -12,6 +12,7 @@ const cors = require('cors');
 // Importar rutas (se asume que "productos.js" está en ../routes/)
 const productosRoute = require('../routes/productos');
 const categoriasRoute = require('../routes/categorias');
+const paymentsRoute = require('../routes/payments');
 
 const app = express();
 
@@ -22,10 +23,11 @@ app.use(cors());
 // Uso de rutas
 app.use('/api/products', productosRoute);
 app.use('/api/categories', categoriasRoute);
+app.use('/api/payments', paymentsRoute);
 
 // Ruta raíz
 app.get('/', (req, res) => {
-  res.send('API de Tienda de Juegos - Endpoints disponibles: /api/products, /api/categories');
+  res.send('API de Tienda de Juegos - Endpoints disponibles: /api/products, /api/categories, /api/payments');
 });
 
 // Tomar el puerto desde las variables de entorno o usar 3000 por defecto

@@ -60,6 +60,11 @@ export class InventarioService {
     }
     
     producto.cantidad -= cantidad;
+    // Si la cantidad llega a 0, eliminar el producto del inventario
+    if (producto.cantidad === 0) {
+      this.eliminarProducto(id);
+    }
+    // Actualizar el inventario
     this.inventario.next([...productos]);
     return true;
   }

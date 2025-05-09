@@ -96,11 +96,22 @@ export class CarritoService {
     return this.productosCarrito.value;
   }
 
-  vaciarCarrito() {
+  // Para cuando se cancela la compra o hay un error - devuelve productos al inventario
+  vaciarCarritoConDevolucion() {
     // Devolver todos los productos al inventario
     this.productosCarrito.value.forEach(p => {
       this.inventarioService.aumentarStock(p.id, p.cantidad);
     });
+    this.productosCarrito.next([]);
+  }
+
+  // Para cuando la compra es exitosa - NO devuelve productos al inventario
+  vaciarCarrito() {
+    // reducimos el stock de los productos vendidos
+    this.productosCarrito.value.forEach(p => {
+      this.inventarioService.reducirStock(p.id, p.cantidad);
+    }
+    );
     this.productosCarrito.next([]);
   }
 
