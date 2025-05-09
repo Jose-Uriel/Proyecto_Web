@@ -1,0 +1,69 @@
+<div class="recibo-container">
+  <div class="recibo-header">
+    <div class="logo">Logo</div>
+    <div class="eslogan">Eslogan</div>
+  </div>
+  
+  <div class="recibo-info">
+    <div class="info-izquierda">
+      <div>Num. Ficha: {{orderId}}</div>
+      <div>Fecha y hora de compra: {{orderDate | date:'medium'}}</div>
+      <div>Dirección facturación: Cliente en línea</div>
+      <div class="vendedor">Vendedor: (Sistema en línea)</div>
+    </div>
+    
+    <div class="info-derecha">
+      <div class="nombre-cliente">Nombre/razón social: Cliente Web</div>
+      <div class="nif-cliente">NIF: </div>
+    </div>
+  </div>
+  
+  <div class="razon-ficha">
+    Razón ficha (compra/reparacion)
+  </div>
+  
+  <div class="linea-separadora"></div>
+  
+  <table class="productos-tabla">
+    <thead>
+      <tr>
+        <th>Cantidad</th>
+        <th>Producto</th>
+        <th>IVA</th>
+        <th>Precio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>{{item.cantidad}}</td>
+        <td>{{item.nombre}}</td>
+        <td>16%</td>
+        <td>${{(item.precio * item.cantidad).toFixed(2)}}</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="linea-separadora"></div>
+  
+  <div class="resumen-totales">
+    <div class="logo-footer">Logo</div>
+    <div class="totales">
+      <div class="total-item"><span>Subtotal:</span><span>${{subtotal.toFixed(2)}}</span></div>
+      <div class="total-item"><span>IVA:</span><span>${{iva.toFixed(2)}}</span></div>
+      <div class="total-item total-final"><span>Total:</span><span>${{total.toFixed(2)}}</span></div>
+      <div class="precio-letras">[{{numeroALetras(total)}}]</div>
+    </div>
+  </div>
+  
+  <div class="agradecimiento">-----GRACIAS POR SU COMPRA-----</div>
+  
+  <div class="pie-recibo">
+    <div class="pagina-web">[pagina web de compra]</div>
+    <div class="referencia">Referencia: {{orderId}}</div>
+  </div>
+  
+  <div class="acciones-recibo">
+    <button (click)="volverTienda()">Volver a la tienda</button>
+    <button (click)="imprimirRecibo()">Imprimir recibo</button>
+  </div>
+</div>

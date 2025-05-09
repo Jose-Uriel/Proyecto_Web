@@ -125,17 +125,50 @@ export class CarritoComponent implements OnInit, OnDestroy, AfterViewInit {
       // Usa actions.order.capture() para finalizar el pago
       onApprove: (data: any, actions: any) => {
         this.paymentStatus = 'Pago aprobado. Finalizando...';
+        console.log('PayPal onApprove data:', data);
         
         return actions.order.capture().then((details: any) => {
+          console.log('PayPal capture details:', details);
           this.paymentStatus = '¡Pago completado con éxito!';
-          this.procesarCompraExitosa();
           
-          setTimeout(() => {
-            this.isPaying = false;
-            // Para compra exitosa, usar vaciarCarrito() (SIN devolución)
-            this.carritoService.vaciarCarrito();
-            this.router.navigate(['/productos']);
-          }, 2000);
+          // Prepare payment data
+          const paymentData = {
+            orderId: data.orderID,
+            items: this.carrito
+          };
+          
+          // Store order data for receipt
+          localStorage.setItem('orderItems', JSON.stringify(this.carrito));
+          localStorage.setItem('orderTotal', this.total.toString());
+          localStorage.setItem('orderSubtotal', this.subtotal.toString());
+          localStorage.setItem('orderIVA', this.iva.toString());
+          localStorage.setItem('orderId', data.orderID);
+          localStorage.setItem('orderDate', new Date().toISOString());
+          
+          // Send items to backend for stock update
+          this.paypalService.capturePayment(data.orderID, this.carrito).subscribe({
+            next: (response) => {
+              console.log('Backend response:', response);
+              // Navigate to receipt page
+              this.isPaying = false;
+              this.carritoService.vaciarCarrito(); // Clear cart without restocking
+              this.router.navigate(['/recibo']);
+            },
+            error: (error) => {
+              console.error('Error details:', error);
+              this.paymentStatus = 'Error al procesar el pago en el servidor';
+              
+              // Navigate to receipt anyway since PayPal payment was successful
+              setTimeout(() => {
+                this.isPaying = false;
+                this.carritoService.vaciarCarrito(); // Clear cart without restocking
+                this.router.navigate(['/recibo']);
+              }, 3000);
+            }
+          });
+        }).catch((err: any) => {
+          console.error('PayPal capture error:', err);
+          this.paymentStatus = 'Error en el procesamiento del pago';
         });
       },
       
@@ -194,12 +227,28 @@ export class CarritoComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log('Descargando XML...');
   }
   
-  procesarCompraExitosa(): void {
-    // Actualizar inventario tras confirmación de pago
-    this.carrito.forEach(item => {
-      console.log(`Actualizando inventario para producto ${item.id}: -${item.cantidad} unidades`);
-      // Aquí puedes implementar la actualización del inventario
-    });
-    console.log('Compra procesada con éxito');
+  procesarCompraExitosa(orderDetails: any): void {
+    // Store order data in localStorage for reference
+    localStorage.setItem('lastOrderDetails', JSON.stringify(orderDetails));
+    
+    // Store cart contents for the receipt
+    localStorage.setItem('orderItems', JSON.stringify(this.carrito));
+    localStorage.setItem('orderTotal', this.total.toString());
+    localStorage.setItem('orderSubtotal', this.subtotal.toString());
+    localStorage.setItem('orderIVA', this.iva.toString());
+    
+    // Only navigate if we're not already doing so in the timeout
+    if (!this.isPaying) {
+      this.router.navigate(['/recibo'], { 
+        queryParams: { 
+          orderId: orderDetails.id || '',
+          date: new Date().toISOString()
+        }
+      });
+    } else {
+      // If isPaying is true, we're inside the PayPal flow
+      // Modify the timeout callback in onApprove to navigate to receipt instead of productos
+      // This is handled below in the onApprove method
+    }
   }
 }

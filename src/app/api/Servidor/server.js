@@ -27,7 +27,7 @@ app.use('/api/payments', paymentsRoute);
 
 // Ruta raíz
 app.get('/', (req, res) => {
-  res.send('API de Tienda de Juegos - Endpoints disponibles: /api/products, /api/categories, /api/payments');
+  res.send('API de Tienda de Juegos');
 });
 
 // Tomar el puerto desde las variables de entorno o usar 3000 por defecto
@@ -35,5 +35,4 @@ const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
-  console.log(`Base de datos: ${process.env.DB_DATABASE}`);
 });

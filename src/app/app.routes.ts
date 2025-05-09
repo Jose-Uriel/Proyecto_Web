@@ -5,6 +5,7 @@ import { InventarioComponent } from './componentes/inventario/inventario.compone
 import { NgModule } from '@angular/core';
 import { UsuariosComponent } from './componentes/usuarios/usuarios.component';
 import { OrdenesComponent } from './componentes/ordenes/ordenes.component';
+import { ReciboComponent } from './componentes/recibo/recibo.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/productos', pathMatch: 'full' },
@@ -13,7 +14,8 @@ export const routes: Routes = [
   { path: 'inventario', component: InventarioComponent },
   { path: 'products', component: ProductoComponent },
   { path: 'users', component: UsuariosComponent },
-  { path: 'orders', component: OrdenesComponent }
+  { path: 'orders', component: OrdenesComponent },
+  { path: 'recibo', component: ReciboComponent }
 ];
 
 @NgModule({
