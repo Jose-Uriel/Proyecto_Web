@@ -1,31 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InventarioService } from '../../services/inventario.service';
 import { Producto } from '../../models/producto';
+import { InventarioService } from '../../services/inventario.service';
 
-@Component
-({
+@Component({
   selector: 'app-inventario',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: `./inventario.component.html`,
+  templateUrl: './inventario.component.html',
   styleUrl: './inventario.component.css'
 })
-export class InventarioComponent implements OnInit 
-{
+export class InventarioComponent implements OnInit {
   inventario: Producto[] = [];
-  productoActual: Producto = new Producto(0, '', 0, 0, '');
+  productoActual: Producto = new Producto(0, '', 0, 0, '', 1, '');
   modoEdicion: boolean = false;
   productosDisponibles: number = 0;
   valorTotalInventario: number = 0;
+  categorias: any[] = []; // Add this line to store categories
 
   constructor(private inventarioService: InventarioService) { }
 
-  ngOnInit(): void 
-  {
+  ngOnInit(): void {
     this.cargarInventario();
-    this.calcularEstadisticas();
+    this.cargarCategorias(); // Add this line to load categories
+  }
+
+  // Add this method to load categories
+  cargarCategorias(): void {
+    this.inventarioService.getCategories().subscribe({
+      next: (data) => {
+        this.categorias = data;
+        console.log('Categorías cargadas:', this.categorias);
+      },
+      error: (err) => {
+        console.error('Error al cargar categorías:', err);
+      }
+    });
   }
 
   cargarInventario(): void 
@@ -77,7 +88,7 @@ export class InventarioComponent implements OnInit
 
   resetForm(): void 
   {
-    this.productoActual = new Producto(0, '', 0, 0, '');
+    this.productoActual = new Producto(0, '', 0, 0, '', 1, '');
     this.modoEdicion = false;
   }
 

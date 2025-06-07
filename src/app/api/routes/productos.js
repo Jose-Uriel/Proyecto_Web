@@ -18,44 +18,28 @@ router.get('/', async (req, res) =>
 	}
 });
 
-// Obtener un producto por ID
-router.get('/:id', async (req, res) => 
-{
-  const id = req.params.id;
-  try 
-  {
-    const pool = await poolPromise;
-    const result = await pool.request()
-      .input('id', sql.Int, id)
-      .query('SELECT * FROM Products WHERE ProductID = @id');
-    res.json(result.recordset[0]);
-  } 
-  catch (err) 
-  {
-    res.status(500).send(err.message);
-  }
-});
-
 // Crear un nuevo producto
 router.post('/', async (req, res) => 
 {
-  const { CategoryID, Name, Price, Description, Stock } = req.body;
+  const { ProductID, CategoryID, Name, Price, Description, Stock, Image } = req.body;
   try 
   {
     const pool = await poolPromise;
     await pool.request()
+      .input('ProductID', sql.Int, ProductID)
       .input('CategoryID', sql.Int, CategoryID)
       .input('Name', sql.NVarChar, Name)
       .input('Price', sql.Decimal(10, 2), Price)
       .input('Description', sql.NVarChar, Description)
       .input('Stock', sql.Int, Stock)
-      .query(`INSERT INTO Products (CategoryID, Name, Price, Description, Stock)
-              VALUES (@CategoryID, @Name, @Price, @Description, @Stock)`);
-    res.status(201).send('Producto creado');
+      .input('Image', sql.NVarChar, Image || null)
+      .query(`INSERT INTO Products (ProductID, CategoryID, Name, Price, Description, Stock, Image)
+              VALUES (@ProductID, @CategoryID, @Name, @Price, @Description, @Stock, @Image)`);
+    res.status(201).json({ message: 'Producto creado' }); // Changed from send() to json()
   } 
   catch (err) 
   {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: err.message }); // Also update this to json()
   }
 });
 
@@ -81,11 +65,11 @@ router.put('/:id', async (req, res) =>
                 Description = @Description,
                 Stock = @Stock
               WHERE ProductID = @id`);
-    res.send('Producto actualizado');
+    res.json({ message: 'Producto actualizado' }); // Changed from send()
   } 
   catch (err) 
   {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: err.message }); // Changed from send()
   }
 });
 
@@ -98,8 +82,26 @@ router.delete('/:id', async (req, res) =>
     await pool.request()
       .input('id', sql.Int, id)
       .query('DELETE FROM Products WHERE ProductID = @id');
-    res.send('Producto eliminado');
+    res.json({ message: 'Producto eliminado' }); // Changed from send()
   } catch (err) {
+    res.status(500).json({ error: err.message }); // Changed from send()
+  }
+});
+
+// Mover estas rutas especiales ANTES de la ruta /:id
+
+// Obtener productos en stock
+router.get('/instock', async (req, res) => 
+{
+  try 
+  {
+    const pool = await poolPromise;
+    const result = await pool.request()
+      .query('SELECT * FROM Products WHERE Stock > 0');
+    res.json(result.recordset);
+  } 
+  catch (err) 
+  {
     res.status(500).send(err.message);
   }
 });
@@ -140,22 +142,6 @@ router.get('/category/:id', async (req, res) =>
   }
 });
 
-// Obtener productos en stock
-router.get('/instock', async (req, res) => 
-{
-  try 
-  {
-    const pool = await poolPromise;
-    const result = await pool.request()
-      .query('SELECT * FROM Products WHERE Stock > 0');
-    res.json(result.recordset);
-  } 
-  catch (err) 
-  {
-    res.status(500).send(err.message);
-  }
-});
-
 // Obtener productos por rango de precio
 router.get('/price/:min/:max', async (req, res) => 
 {
@@ -174,6 +160,25 @@ router.get('/price/:min/:max', async (req, res) =>
     {
         res.status(500).send(err.message);
     }
+});
+
+// Después de todas las rutas especiales, define la ruta con el parámetro
+// Obtener un producto por ID
+router.get('/:id', async (req, res) => 
+{
+  const id = req.params.id;
+  try 
+  {
+    const pool = await poolPromise;
+    const result = await pool.request()
+      .input('id', sql.Int, id)
+      .query('SELECT * FROM Products WHERE ProductID = @id');
+    res.json(result.recordset[0]);
+  } 
+  catch (err) 
+  {
+    res.status(500).send(err.message);
+  }
 });
 
 module.exports = router;

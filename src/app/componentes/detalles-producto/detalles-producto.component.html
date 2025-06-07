@@ -1,0 +1,38 @@
+<div class="detalles-producto-container">
+  <div class="navegacion">
+    <button (click)="volverAlCatalogo()" class="btn-volver">← Volver al catálogo</button>
+  </div>
+
+  <div *ngIf="cargando" class="cargando">
+    <p>Cargando detalles del producto...</p>
+  </div>
+
+  <div *ngIf="error" class="error-mensaje">
+    <p>{{ error }}</p>
+    <button (click)="volverAlCatalogo()" class="btn-volver">Volver al catálogo</button>
+  </div>
+
+  <div *ngIf="!cargando && !error" class="producto-detalle">
+    <div class="producto-imagen">
+      <img [src]="producto.imagen" alt="{{ producto.nombre }}">
+    </div>
+    
+    <div class="producto-info">
+      <h1 class="producto-nombre">{{ producto.nombre }}</h1>
+      <p class="producto-precio">${{ producto.precio.toFixed(2) }} MXN</p>
+      
+      <div class="cantidad-selector">
+        <button (click)="disminuirCantidad()" [disabled]="cantidad <= 1">−</button>
+        <input type="text" [value]="cantidad" readonly>
+        <button (click)="aumentarCantidad()" [disabled]="cantidad >= producto.cantidad">+</button>
+      </div>
+      
+      <button (click)="agregarAlCarrito()" class="btn-agregar">Añadir al carrito</button>
+    </div>
+  </div>
+
+  <div *ngIf="!cargando && !error" class="producto-descripcion">
+    <h2>Descripción del producto</h2>
+    <p>{{ producto.description }}</p>
+  </div>
+</div>

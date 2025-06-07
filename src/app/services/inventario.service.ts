@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+interface Category {
+  CategoryID: number;
+  CategoryName: string;
+  Description: string;
+}
 
 interface Producto {
   id: number;
@@ -8,6 +15,8 @@ interface Producto {
   precio: number;
   cantidad: number;
   imagen: string;
+  categoryId: number;
+  description: string;
 }
 
 @Injectable({
@@ -17,9 +26,15 @@ export class InventarioService {
   private inventario = new BehaviorSubject<Producto[]>([]);
   public inventario$ = this.inventario.asObservable();
   private apiURL = 'http://localhost:3000/api/products';
+  private categoriesURL = 'http://localhost:3000/api/categories';
 
   constructor(private http: HttpClient) {
     this.cargarProductosDesdeAPI();
+  }
+
+  // Add method to fetch categories
+  getCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.categoriesURL);
   }
 
   private cargarProductosDesdeAPI(): void {
@@ -30,7 +45,9 @@ export class InventarioService {
           nombre: item.Name,
           precio: item.Price,
           cantidad: item.Stock,
-          imagen: item.Image || 'assets/Portatil/Nintendo/3DS/3DS/Normales/3DS.jpg'
+          imagen: item.Image || 'assets/Portatil/Nintendo/3DS/3DS/Normales/3DS.jpg',
+          categoryId: item.CategoryID,
+          description: item.Description
         }));
         this.inventario.next(productos);
         console.log('Inventario cargado desde API:', productos);
@@ -92,7 +109,9 @@ export class InventarioService {
         Name: producto.nombre,
         Price: producto.precio,
         Stock: producto.cantidad,
-        Image: producto.imagen
+        Image: producto.imagen,
+        CategoryID: producto.categoryId,
+        Description: producto.description
       }).subscribe({
         next: () => console.log('Producto actualizado en el servidor'),
         error: (err) => console.error('Error al actualizar producto en el servidor', err)
@@ -117,7 +136,8 @@ export class InventarioService {
       Price: producto.precio,
       Stock: producto.cantidad,
       Image: producto.imagen,
-      CategoryID: 1
+      CategoryID: producto.categoryId,
+      Description: producto.description
     }).subscribe({
       next: () => console.log('Producto agregado en el servidor'),
       error: (err) => console.error('Error al agregar producto en el servidor', err)

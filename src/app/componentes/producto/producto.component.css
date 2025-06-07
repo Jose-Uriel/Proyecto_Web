@@ -24,6 +24,12 @@
   object-fit: cover;
   border-radius: 5px;
   margin-bottom: 15px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.Producto img:hover {
+  transform: scale(1.05);
 }
 
 .Producto h3 {
@@ -56,6 +62,38 @@
 
 .Producto button:hover {
   background-color: #45a049;
+}
+
+.producto-nombre {
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s;
+}
+
+.producto-nombre:hover {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.producto-botones {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.btn-detalles {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-detalles:hover {
+  background-color: #2980b9;
 }
 
 .botones-navegacion {

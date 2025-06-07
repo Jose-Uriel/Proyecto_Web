@@ -13,6 +13,7 @@ const cors = require('cors');
 const productosRoute = require('../routes/productos');
 const categoriasRoute = require('../routes/categorias');
 const paymentsRoute = require('../routes/payments');
+const usuariosRoute = require('../routes/usuarios'); // Add the usuarios route
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(cors());
 app.use('/api/products', productosRoute);
 app.use('/api/categories', categoriasRoute);
 app.use('/api/payments', paymentsRoute);
+app.use('/api/users', usuariosRoute); // Add this line
 
 // Ruta raíz
 app.get('/', (req, res) => {

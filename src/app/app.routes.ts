@@ -2,20 +2,22 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProductoComponent } from './componentes/producto/producto.component';
 import { CarritoComponent } from './componentes/carrito/carrito.component';
 import { InventarioComponent } from './componentes/inventario/inventario.component';
-import { NgModule } from '@angular/core';
-import { UsuariosComponent } from './componentes/usuarios/usuarios.component';
-import { OrdenesComponent } from './componentes/ordenes/ordenes.component';
 import { ReciboComponent } from './componentes/recibo/recibo.component';
+import { LoginComponent } from './componentes/login/login.component';
+import { AdminGuard } from './guards/admin.guard';
+import { NgModule } from '@angular/core';
+import { DetallesProductoComponent } from './componentes/detalles-producto/detalles-producto.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/productos', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
   { path: 'productos', component: ProductoComponent },
+  { path: 'producto/:id', component: DetallesProductoComponent },
   { path: 'carrito', component: CarritoComponent },
-  { path: 'inventario', component: InventarioComponent },
-  { path: 'products', component: ProductoComponent },
-  { path: 'users', component: UsuariosComponent },
-  { path: 'orders', component: OrdenesComponent },
-  { path: 'recibo', component: ReciboComponent }
+  { path: 'recibo', component: ReciboComponent },
+  // Protected route - only admins can access
+  { path: 'inventario', component: InventarioComponent, canActivate: [AdminGuard] },
+  { path: '**', redirectTo: 'login' }
 ];
 
 @NgModule({

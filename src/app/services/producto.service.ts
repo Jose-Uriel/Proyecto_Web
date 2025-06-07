@@ -23,46 +23,13 @@ export class ProductoService {
     );
   }
 
-  /* 
-  // Este método ahora obtendrá solo productos disponibles
-  obtener_Producto(id: number): Observable<any> 
-  {
+  // Método para obtener productos en stock
+  obtener_ProductosEnStock(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiURL}/instock`);
+  }
+
+  // Método para obtener un producto por ID
+  obtener_Producto(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiURL}/${id}`);
   }
-
-  // Método para obtener productos desde el XML
-  addProduct(product: any): Observable<any> 
-  {
-    return this.http.post<any>(this.apiURL, product);  
-  }
-
-  // Método para agregar un producto al inventario
-  updateProduct(id: number, product: any): Observable<any> 
-  {
-    return this.http.put<any>(`${this.apiURL}/${id}`, product);
-  }
-
-  // Método para eliminar un producto
-  deleteProduct(id: number): Observable<any> 
-  {
-    return this.http.delete<any>(`${this.apiURL}/${id}`);
-  }
-  */
-
-  // Método para obtener productos desde XML
-  /*
-  obtener_Productos(): Observable<any[]> {
-    return this.http.get(this.xmlUrl, { responseType: 'text' }).pipe(
-      map(xml => {
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xml, 'text/xml');
-        const productos = Array.from(xmlDoc.querySelectorAll('producto')).map(producto => ({
-          id: producto.getElementsByTagName('id')[0].textContent,
-          nombre: producto.getElementsByTagName('nombre')[0].textContent,
-        }));
-        return productos;
-      })
-    );
-  }
-  */
 }

@@ -20,12 +20,13 @@ export class ProductoComponent implements OnInit {
   constructor(
     private productoService: ProductoService,
     private carritoService: CarritoService,
-    private inventarioService: InventarioService, // Add this injection
+    private inventarioService: InventarioService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.productoService.obtener_Productos().subscribe({
+    // Change to use the instock endpoint
+    this.productoService.obtener_ProductosEnStock().subscribe({
       next: (data) => {
         // Mapear los datos del API a la estructura que espera el HTML
         this.productos = data.map(item => ({
@@ -33,9 +34,11 @@ export class ProductoComponent implements OnInit {
           nombre: item.Name, 
           precio: item.Price,
           cantidad: item.Stock,
-          imagen: item.Image || 'assets/Portatil/Nintendo/3DS/3DS/Normales/3DS.jpg'
+          imagen: item.Image || 'assets/Portatil/Nintendo/3DS/3DS/Normales/3DS.jpg',
+          description: item.Description || '',
+          categoryId: item.CategoryID
         }));
-        console.log('Productos cargados:', this.productos);
+        console.log('Productos en stock cargados:', this.productos);
       },
       error: (error) => {
         console.error('Error al cargar productos:', error);
@@ -65,5 +68,10 @@ export class ProductoComponent implements OnInit {
 
   ir_Al_Inventario() {
     this.router.navigate(['/inventario']);
+  }
+  
+  // Add method to navigate to product detail page
+  verDetalles(producto: any) {
+    this.router.navigate(['/producto', producto.id]);
   }
 }

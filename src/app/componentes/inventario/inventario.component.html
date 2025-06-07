@@ -31,8 +31,22 @@
       </div>
       
       <div class="form-grupo">
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" [(ngModel)]="productoActual.description" name="descripcion" rows="3"></textarea>
+      </div>
+      
+      <div class="form-grupo">
         <label for="imagen">URL de Imagen:</label>
         <input type="text" id="imagen" [(ngModel)]="productoActual.imagen" name="imagen" required>
+      </div>
+      
+      <div class="form-grupo">
+        <label for="categoria">Categoría:</label>
+        <select id="categoria" [(ngModel)]="productoActual.categoryId" name="categoria" required>
+          <option *ngFor="let categoria of categorias" [value]="categoria.CategoryID">
+            {{ categoria.CategoryName }}
+          </option>
+        </select>
       </div>
       
       <div class="botones-accion">

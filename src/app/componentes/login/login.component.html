@@ -1,0 +1,162 @@
+<div class="login-container">
+  <div class="tab-container">
+    <div class="tabs">
+      <div class="tab" [class.active]="activeTab === 'login'" (click)="setActiveTab('login')">Iniciar Sesión</div>
+      <div class="tab" [class.active]="activeTab === 'register'" (click)="setActiveTab('register')">Registrarse</div>
+      <div class="tab" [class.active]="activeTab === 'recover'" (click)="setActiveTab('recover')">Recuperar Contraseña</div>
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-container" *ngIf="activeTab === 'login'">
+      <h2>Iniciar Sesión</h2>
+      <form (ngSubmit)="onLogin()" [formGroup]="loginForm">
+        <div class="form-group">
+          <label for="loginUsername">Usuario:</label>
+          <input type="text" id="loginUsername" formControlName="username" class="form-control">
+          <div class="error-message" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+            El nombre de usuario es requerido
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Contraseña:</label>
+          <input type="password" id="loginPassword" formControlName="password" class="form-control">
+          <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            La contraseña es requerida
+          </div>
+        </div>
+
+        <div class="form-message error-text" *ngIf="loginError">
+          {{ loginError }}
+        </div>
+
+        <button type="submit" [disabled]="loginForm.invalid || isLoading" class="btn-submit">
+          <span *ngIf="!isLoading">Iniciar Sesión</span>
+          <span *ngIf="isLoading">Cargando...</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Register Form -->
+    <div class="form-container" *ngIf="activeTab === 'register'">
+      <h2>Crear Nueva Cuenta</h2>
+      <form (ngSubmit)="onRegister()" [formGroup]="registerForm">
+        <div class="form-group">
+          <label for="registerUsername">Usuario:</label>
+          <input type="text" id="registerUsername" formControlName="username" class="form-control">
+          <div class="error-message" *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+            El nombre de usuario es requerido (mínimo 4 caracteres)
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" formControlName="email" class="form-control">
+          <div class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+            Por favor, ingrese un email válido
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="registerPassword">Contraseña:</label>
+          <input type="password" id="registerPassword" formControlName="password" class="form-control">
+          <div class="error-message" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+            La contraseña debe tener al menos 6 caracteres
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar Contraseña:</label>
+          <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control">
+          <div class="error-message" *ngIf="registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched">
+            Las contraseñas no coinciden
+          </div>
+        </div>
+
+        <div class="form-message error-text" *ngIf="registerError">
+          {{ registerError }}
+        </div>
+
+        <div class="form-message success-text" *ngIf="registerSuccess">
+          {{ registerSuccess }}
+        </div>
+
+        <button type="submit" [disabled]="registerForm.invalid || isLoading" class="btn-submit">
+          <span *ngIf="!isLoading">Registrarse</span>
+          <span *ngIf="isLoading">Cargando...</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Password Recovery Form -->
+    <div class="form-container" *ngIf="activeTab === 'recover'">
+      <h2>Recuperación de Contraseña</h2>
+      <div *ngIf="!resetSuccess">
+        <div *ngIf="!verificationSuccess">
+          <form (ngSubmit)="onVerifyAccount()" [formGroup]="recoveryForm">
+            <div class="form-group">
+              <label for="recoveryUsername">Usuario:</label>
+              <input type="text" id="recoveryUsername" formControlName="username" class="form-control">
+              <div class="error-message" *ngIf="recoveryForm.get('username')?.invalid && recoveryForm.get('username')?.touched">
+                El nombre de usuario es requerido
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="recoveryEmail">Email:</label>
+              <input type="email" id="recoveryEmail" formControlName="email" class="form-control">
+              <div class="error-message" *ngIf="recoveryForm.get('email')?.invalid && recoveryForm.get('email')?.touched">
+                Por favor, ingrese un email válido
+              </div>
+            </div>
+
+            <div class="form-message error-text" *ngIf="recoveryError">
+              {{ recoveryError }}
+            </div>
+
+            <button type="submit" [disabled]="recoveryForm.invalid || isLoading" class="btn-submit">
+              <span *ngIf="!isLoading">Verificar Cuenta</span>
+              <span *ngIf="isLoading">Verificando...</span>
+            </button>
+          </form>
+        </div>
+
+        <div *ngIf="verificationSuccess">
+          <form (ngSubmit)="onResetPassword()" [formGroup]="resetForm">
+            <div class="form-group">
+              <label for="newPassword">Nueva Contraseña:</label>
+              <input type="password" id="newPassword" formControlName="newPassword" class="form-control">
+              <div class="error-message" *ngIf="resetForm.get('newPassword')?.invalid && resetForm.get('newPassword')?.touched">
+                La contraseña debe tener al menos 6 caracteres
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="confirmNewPassword">Confirmar Contraseña:</label>
+              <input type="password" id="confirmNewPassword" formControlName="confirmNewPassword" class="form-control">
+              <div class="error-message" *ngIf="resetForm.hasError('passwordMismatch') && resetForm.get('confirmNewPassword')?.touched">
+                Las contraseñas no coinciden
+              </div>
+            </div>
+
+            <div class="form-message error-text" *ngIf="resetError">
+              {{ resetError }}
+            </div>
+
+            <button type="submit" [disabled]="resetForm.invalid || isLoading" class="btn-submit">
+              <span *ngIf="!isLoading">Cambiar Contraseña</span>
+              <span *ngIf="isLoading">Cambiando...</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="form-message success-text" *ngIf="resetSuccess">
+        {{ resetSuccess }}
+        <div class="mt-3">
+          <button (click)="setActiveTab('login')" class="btn-submit">Ir a Iniciar Sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

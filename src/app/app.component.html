@@ -1,11 +1,34 @@
-<header>
-    <!-- Your navigation goes here -->
-  </header>
+<header class="main-header">
+  <div class="container">
+    <div class="admin-controls" *ngIf="isAdmin">
+      <a routerLink="/inventario" class="admin-button">Administrar inventario</a>
+      <!-- Empty button for symmetry as shown in your design -->
+      <div class="admin-button empty-button"></div>
+    </div>
+    
+    <nav class="main-nav">
+      <ul>
+        <li><a routerLink="/productos" class="nav-button">Inicio</a></li>
+        <li><a routerLink="/productos" class="nav-button">Catalogo</a></li>
+        <li><a routerLink="/carrito" class="nav-button">Carrito</a></li>
+        
+        <ng-container *ngIf="isLoggedIn; else loginButton">
+          <li><button class="nav-button logout-btn" (click)="logout()">Cerrar sesion</button></li>
+          <li class="user-icon">
+            <div class="circle-icon">
+              {{ currentUser?.Username.charAt(0).toUpperCase() }}
+            </div>
+          </li>
+        </ng-container>
+        
+        <ng-template #loginButton>
+          <li><a routerLink="/login" class="nav-button">Iniciar Sesión</a></li>
+        </ng-template>
+      </ul>
+    </nav>
+  </div>
+</header>
   
-  <main>
-    <router-outlet></router-outlet>
-  </main>
-  
-  <footer>
-    <!-- Your footer content goes here -->
-  </footer>
+<main class="container">
+  <router-outlet></router-outlet>
+</main>

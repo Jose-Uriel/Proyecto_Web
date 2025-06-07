@@ -41,6 +41,27 @@
   border-radius: 4px;
 }
 
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+§
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+select:focus, textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
 .botones-accion {
   margin-top: 20px;
 }
