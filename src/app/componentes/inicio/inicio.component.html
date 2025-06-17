@@ -1,0 +1,26 @@
+<div class="inicio-container">
+  <div *ngIf="currentUser && currentUser.Username" class="welcome-message">
+    <h1>Bienvenido, {{ currentUser.Username }}!</h1>
+  </div>
+  <div *ngIf="!currentUser || !currentUser.Username" class="welcome-message">
+    <h1>Bienvenido a Nuestra Tienda</h1>
+  </div>
+
+  <h2>Productos Destacados</h2>
+  <div class="Productos" *ngIf="productos.length > 0; else noProducts">
+    <div class="Producto" *ngFor="let producto of productos">
+      <img [src]="producto.imagen" (click)="verDetalles(producto)" alt="{{producto.nombre}}">
+      <h3 (click)="verDetalles(producto)" class="producto-nombre">{{producto.nombre}}</h3>
+      <p>Precio: ${{producto.precio | number:'1.2-2'}}</p>
+      <p *ngIf="producto.cantidad > 0">Disponibles: {{producto.cantidad}}</p>
+      <p *ngIf="producto.cantidad === 0" class="agotado-text">Agotado</p>
+      <div class="producto-botones">
+        <button (click)="agregar_Al_Carrito(producto)" [disabled]="producto.cantidad === 0">Agregar al carrito</button>
+        <button (click)="verDetalles(producto)" class="btn-detalles">Ver detalles</button>
+      </div>
+    </div>
+  </div>
+  <ng-template #noProducts>
+    <p class="no-results">No hay productos destacados disponibles en este momento.</p>
+  </ng-template>
+</div>

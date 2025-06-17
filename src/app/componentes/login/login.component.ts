@@ -38,6 +38,15 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // If already logged in, redirect
+    if (this.usuariosService.isLoggedIn()) {
+      if (this.usuariosService.isAdmin()) {
+        this.router.navigate(['/inventario']);
+      } else {
+        this.router.navigate(['/inicio']);
+      }
+    }
+
     // Initialize login form
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -93,18 +102,18 @@ export class LoginComponent implements OnInit {
     const { username, password } = this.loginForm.value;
 
     this.usuariosService.login(username, password).subscribe({
-      next: (user) => {
+      next: () => { // The user object is now handled by the service
         this.isLoading = false;
-        // Navigate to the appropriate page after login
         if (this.usuariosService.isAdmin()) {
           this.router.navigate(['/inventario']);
         } else {
-          this.router.navigate(['/productos']);
+          this.router.navigate(['/inicio']); // Redirect to home for regular users
         }
       },
       error: (err) => {
         this.isLoading = false;
-        this.loginError = err.error?.message || 'Error al iniciar sesión. Verifique sus credenciales.';
+        // The service's handleError now formats the error message
+        this.loginError = err.message || 'Error al iniciar sesión. Verifique sus credenciales.';
       }
     });
   }
@@ -123,14 +132,13 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
         this.registerSuccess = 'Registro exitoso. Ahora puedes iniciar sesión.';
         this.registerForm.reset();
-        // Switch to login tab after successful registration
         setTimeout(() => {
           this.setActiveTab('login');
         }, 2000);
       },
       error: (err) => {
         this.isLoading = false;
-        this.registerError = err.error?.message || 'Error al registrarse. Intente nuevamente.';
+        this.registerError = err.message || 'Error al registrarse. Intente nuevamente.';
       }
     });
   }
@@ -170,6 +178,10 @@ export class LoginComponent implements OnInit {
         this.resetSuccess = 'Contraseña actualizada correctamente.';
         this.resetForm.reset();
         this.verificationSuccess = false;
+        // Optionally, switch to login tab
+        setTimeout(() => {
+          this.setActiveTab('login');
+        }, 2000);
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading = false;

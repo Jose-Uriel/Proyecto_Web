@@ -96,25 +96,58 @@
   background-color: #2980b9;
 }
 
-.botones-navegacion {
-  margin-top: 30px;
+.filtros-container {
   display: flex;
-  gap: 10px;
-  justify-content: center;
+  gap: 15px; /* Reduced gap */
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  align-items: flex-end; /* Align items to the bottom for better button alignment */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
-.botones-navegacion button {
-  padding: 10px 20px;
-  background-color: #3498db;
+.filtro-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px; /* Minimum width for filter items */
+}
+
+.filtro-item label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.filtro-item select,
+.filtro-item input[type="number"] {
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-sizing: border-box; /* Ensure padding doesn't increase width */
+  width: 100%; /* Make inputs/selects take full width of .filtro-item */
+}
+
+.filtro-item button {
+  padding: 8px 15px;
+  background-color: #6c757d;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  height: 38px; /* Match height of inputs/selects */
+  align-self: flex-end; /* Align button to the bottom if label makes it taller */
 }
 
-.botones-navegacion button:hover {
-  background-color: #2980b9;
+.filtro-item button:hover {
+  background-color: #5a6268;
+}
+
+.no-results {
+  text-align: center;
+  padding: 20px;
+  color: #666;
 }
 
 /* Responsive design para pantallas pequeñas */

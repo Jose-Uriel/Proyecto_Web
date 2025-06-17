@@ -20,12 +20,15 @@ const app = express();
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Uso de rutas
 app.use('/api/products', productosRoute);
 app.use('/api/categories', categoriasRoute);
 app.use('/api/payments', paymentsRoute);
 app.use('/api/users', usuariosRoute); // Add this line
+app.use('/api/usuarios', usuariosRoute); // Aquí se monta el router para /api/usuarios
 
 // Ruta raíz
 app.get('/', (req, res) => {

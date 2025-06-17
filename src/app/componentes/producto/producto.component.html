@@ -1,17 +1,41 @@
 <h2>Catálogo de Productos</h2>
+
+<div class="filtros-container">
+  <div class="filtro-item">
+    <label for="categoria-filter">Categoría:</label>
+    <select id="categoria-filter" [(ngModel)]="selectedCategoryId" (ngModelChange)="applyFilters()">
+      <option [ngValue]="null">Todas</option>
+      <option *ngFor="let categoria of categorias" [value]="categoria.CategoryID">{{ categoria.CategoryName }}</option>
+    </select>
+  </div>
+  <div class="filtro-item">
+    <label for="minPrice-filter">Precio Mín.:</label>
+    <input type="number" id="minPrice-filter" [(ngModel)]="minPrice" (ngModelChange)="applyFilters()" placeholder="Ej: 50">
+  </div>
+  <div class="filtro-item">
+    <label for="maxPrice-filter">Precio Máx.:</label>
+    <input type="number" id="maxPrice-filter" [(ngModel)]="maxPrice" (ngModelChange)="applyFilters()" placeholder="Ej: 500">
+  </div>
+  <div class="filtro-item">
+    <button (click)="resetFilters()">Limpiar Filtros</button>
+  </div>
+</div>
+
 <div class="Productos">
     <div class="Producto" *ngFor="let producto of productos">
-        <img [src]="producto.imagen" (click)="verDetalles(producto)"> 
+        <img [src]="producto.imagen" (click)="verDetalles(producto)" alt="{{producto.nombre}}"> 
         <h3 (click)="verDetalles(producto)" class="producto-nombre">{{producto.nombre}}</h3>
-        <p>Precio: ${{producto.precio}}</p>
+        <p>Precio: ${{producto.precio | number:'1.2-2'}}</p>
         <p>Disponibles: {{producto.cantidad}}</p>
         <div class="producto-botones">
-            <button (click)="agregar_Al_Carrito(producto)">Agregar al carrito</button>
+            <button (click)="agregar_Al_Carrito(producto)" [disabled]="producto.cantidad === 0">Agregar al carrito</button>
             <button (click)="verDetalles(producto)" class="btn-detalles">Ver detalles</button>
         </div>
     </div>
 </div>
-<div class="botones-navegacion">
-    <button (click)="ir_Al_Carrito()">Ir al carrito</button>
-    <button (click)="ir_Al_Inventario()">Administrar Inventario</button>
+<div *ngIf="productos.length === 0 && allProducts.length > 0" class="no-results">
+    <p>No se encontraron productos que coincidan con los filtros aplicados.</p>
+</div>
+<div *ngIf="allProducts.length === 0" class="no-results">
+    <p>No hay productos disponibles en el catálogo en este momento.</p>
 </div>
